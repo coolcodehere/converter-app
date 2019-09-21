@@ -1,3 +1,9 @@
+/*
+InputListener
+
+This class listens for changes in a JTextField, formats the input as a double, and converts the formatted input.
+*/
+
 package com.company;
 
 import javax.swing.*;
@@ -6,12 +12,13 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import java.util.HashMap;
 
-public class ConversionListener implements DocumentListener {
+
+public class InputListener implements DocumentListener {
     private UnitConverter converter = null;
     JComboBox<String> unitSelector;
     JLabel[] outputLabels;
 
-    public ConversionListener(String mode, JComboBox<String> unitSelector, JLabel[] outputLabels) {
+    public InputListener(String mode, JComboBox<String> unitSelector, JLabel[] outputLabels) {
         converter = new UnitConverter(mode);
         this.unitSelector = unitSelector;
         this.outputLabels = outputLabels;

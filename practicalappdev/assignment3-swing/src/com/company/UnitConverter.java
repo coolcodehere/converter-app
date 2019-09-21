@@ -1,3 +1,9 @@
+/*
+UnitConverter
+
+A class containing conversion rates to be multiplied from for each unit.
+ */
+
 package com.company;
 
 import java.util.HashMap;
@@ -9,8 +15,18 @@ public class UnitConverter {
         this.mode = mode;
     }
 
+    /*
+    convert
+
+    Arguments
+    fromUnit: A string representing the unit being converted FROM
+    input: The input value being converted FROM
+
+    Returns: A hashmap containing keys of unit names mapped to their converted values.
+
+    Contains conversion information for weight and distance conversions.
+    */
     public HashMap<String, Double> convert(String fromUnit, double input) {
-        {
             Double[] conversions = null;
             String[] units = null;
             HashMap<String, Double> ret = new HashMap<>();
@@ -57,6 +73,5 @@ public class UnitConverter {
             }
 
             return ret;
-        }
     }
 }

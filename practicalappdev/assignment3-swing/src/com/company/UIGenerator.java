@@ -2,23 +2,18 @@ package com.company;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 
 public class UIGenerator {
-    JFrame primaryFrame;
 
     public UIGenerator() {
         JFrame primaryFrame = new JFrame();
-        primaryFrame.setName("Cool Converter");
+        primaryFrame.setTitle("Weight and Distance Converter");
 
-        String[] distanceLabels = {"Centimeters", "Meters", "Kilometers", "Inches", "Feet", "Miles"};
-        String[] weightLabels = {"Grams", "Kilograms", "Ounces", "Pounds", "Stone", "Earths"};
-        JPanel distancePanel = createPanel(distanceLabels, "Distance");
-        JPanel weightPanel = createPanel(weightLabels, "Weight");
+        JPanel distancePanel = createPanel("Distance");
+        JPanel weightPanel = createPanel("Weight");
 
         JTabbedPane tabbedPane = new JTabbedPane();
 
@@ -32,19 +27,31 @@ public class UIGenerator {
         primaryFrame.setVisible(true);
     }
 
+    /*
+    createPanel
 
-    private JPanel createPanel(String[] labels, String mode) {
+    Arguments
+    mode: A string that can either be "Distance" or "Weight" - anything else throws a
+
+    Generates UI panels within tabbed panes for weight and distance.
+    */
+    private JPanel createPanel(String mode) {
+        String[] labels = null;
+
+        if (mode.equals("Distance")) {
+            labels = new String[] {"Centimeters", "Meters", "Kilometers", "Inches", "Feet", "Miles"};
+        } else if (mode.equals("Weight")) {
+            labels = new String[] {"Grams", "Kilograms", "Ounces", "Pounds", "Stone", "Earths"};
+        } else {
+            throw new IllegalArgumentException();
+        }
+
         JPanel mainPanel = new JPanel(new GridBagLayout());
         JLabel[] outputLabels = new JLabel[6];
         JComboBox<String> inputUnitSelector = new JComboBox<>();
 
         JTextField inputField = new JTextField();
-        inputUnitSelector.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                inputField.setText("");
-            }
-        });
+        inputUnitSelector.addActionListener(e -> inputField.setText(""));
 
         inputField.addKeyListener(new KeyAdapter() {
             @Override
@@ -53,11 +60,9 @@ public class UIGenerator {
                 String inputText = inputField.getText();
                 char newChar = e.getKeyChar();
 
-                System.out.println(inputText.indexOf('.'));
-                if (!Character.isDigit(e.getKeyChar()) && Character.compare(e.getKeyChar(), '.') != 0) {
+                if ((!Character.isDigit(e.getKeyChar()) && e.getKeyChar() != '.') || inputText.length() > 16) {
                     e.consume();
-                } else if (Character.compare(e.getKeyChar(), '.') == 0 && (inputText.indexOf('.') != -1 ||
-                        inputText.equals(""))) {
+                } else if (e.getKeyChar() == '.' && (inputText.indexOf('.') != -1 || inputText.equals(""))) {
                     e.consume();
                 }
             }
@@ -113,7 +118,7 @@ public class UIGenerator {
             mainPanel.add(output, outputConstraints);
         }
 
-        inputField.getDocument().addDocumentListener(new ConversionListener(mode, inputUnitSelector, outputLabels));
+        inputField.getDocument().addDocumentListener(new InputListener(mode, inputUnitSelector, outputLabels));
         mainPanel.add(inputUnitSelector, unitSelectorConstraints);
         inputUnitSelector.setSelectedIndex(0);
         return mainPanel;
